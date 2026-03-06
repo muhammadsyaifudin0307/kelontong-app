@@ -1,30 +1,20 @@
 import express from "express";
 import cors from "cors";
-import db from "mysql2";
+import productsRoute from "./routes/product.route.js";
+import categoriesRoute from "./routes/category.route.js";
+
+import "dotenv/config";
 
 const app = express();
-const port = 3000;
 app.use(cors());
+app.use(express.json());
 
-const pool = db.createPool({
-  host: "localhost",
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
+const PORT = process.env.PORT;
 
-app.get("/", async (req, res) => {
-  try {
-    const [rows] = await pool.query("SELECT * FROM users");
-    res.json(rows);
-  } catch (error) {
-    res.status(500).json({
-      message: "Databases error",
-      error,
-    });
-  }
-});
+app.use("/api", productsRoute);
+app.use("/api", categoriesRoute);
+// app.use(errorMiddlewares);
 
-app.listen(port, () => {
-  console.log("Server is running on  port", port);
+app.listen(PORT, () => {
+  console.log("Server is running on  PORT", PORT);
 });
