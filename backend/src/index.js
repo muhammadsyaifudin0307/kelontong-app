@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import productsRoute from "./routes/product.route.js";
 import categoriesRoute from "./routes/category.route.js";
-
+import { errorHandler } from "./middlewares/error.midllewares.js";
 import "dotenv/config";
 
 const app = express();
@@ -13,7 +13,7 @@ const PORT = process.env.PORT;
 
 app.use("/api", productsRoute);
 app.use("/api", categoriesRoute);
-// app.use(errorMiddlewares);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log("Server is running on  PORT", PORT);

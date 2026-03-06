@@ -5,6 +5,8 @@ import {
   updateCategory,
 } from "../repositories/category.repository.js";
 
+import { errorHandler } from "../middlewares/error.midllewares.js";
+
 export const getCategoriesService = async () => {
   return await getCategories();
 };
@@ -17,7 +19,7 @@ export const updateCategoryService = async (id, data) => {
   const { name } = data;
   const results = await updateCategory(id, name);
   if (!results) {
-    throw new Error("Category not found");
+    throw new errorHandler("Category not found", 404);
   }
   return results;
 };
@@ -25,7 +27,7 @@ export const updateCategoryService = async (id, data) => {
 export const deleteCategoryService = async (id) => {
   const results = await deleteCategory(id);
   if (!results.affectedRows === 0) {
-    throw new Error("Category not found");
+    throw new errorHandler("Category not found", 404);
   }
   return results;
 };

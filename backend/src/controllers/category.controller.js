@@ -5,7 +5,9 @@ import {
   deleteCategoryService,
 } from "../services/category.service.js";
 
-export const getCategoriesController = async (req, res) => {
+// import { errorHandler } from "../middlewares/error.midllewares.js";
+
+export const getCategoriesController = async (req, res, next) => {
   try {
     const data = await getCategoriesService();
     res.status(200).json({
@@ -14,14 +16,11 @@ export const getCategoriesController = async (req, res) => {
       results: data,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-export const createCategoryController = async (req, res) => {
+export const createCategoryController = async (req, res, next) => {
   const { name } = req.body;
   try {
     const data = await createCategoryService(name);
@@ -31,14 +30,11 @@ export const createCategoryController = async (req, res) => {
       results: data,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-export const updateCategoryController = async (req, res) => {
+export const updateCategoryController = async (req, res, next) => {
   const { id } = req.params;
   try {
     const results = await updateCategoryService(id, req.body);
@@ -48,14 +44,11 @@ export const updateCategoryController = async (req, res) => {
       results,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-export const deleteCategoryController = async (req, res) => {
+export const deleteCategoryController = async (req, res, next) => {
   const { id } = req.params;
   try {
     await deleteCategoryService(id);
@@ -64,9 +57,6 @@ export const deleteCategoryController = async (req, res) => {
       message: "Delete category success",
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };

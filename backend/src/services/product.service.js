@@ -1,3 +1,4 @@
+import { errorHandler } from "../middlewares/error.midllewares.js";
 import {
   createProduct,
   deleteProducts,
@@ -17,7 +18,7 @@ export const createProductService = async (data) => {
   // validate product code is same with exiting product code
   const extProductCode = await getProductCode(product_code);
   if (extProductCode) {
-    throw new Error("Product code already exists");
+    throw new errorHandler("Product code already exists", 400);
   }
 
   return await createProduct(
@@ -45,19 +46,19 @@ export const updateProductService = async (id, data) => {
   );
 
   if (!result) {
-    throw new Error("Product not found");
+    throw new errorHandler("Product not found", 404);
   }
   return result;
 };
 
 export const deleteProductService = async (id) => {
   if (!id || Number(id) <= 0) {
-    throw new Error("Invalid product id");
+    throw new errorHandler("Invalid product id", 400);
   }
 
   const results = await deleteProducts(id);
   if (!results.affectedRows) {
-    throw new Error("Product not found");
+    throw new errorHandler("Product not found", 404);
   }
 
   return results;

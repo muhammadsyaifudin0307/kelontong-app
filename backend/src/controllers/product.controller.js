@@ -5,23 +5,20 @@ import {
   updateProductService,
 } from "../services/product.service.js";
 
-export const getAllProductsController = async (req, res) => {
+export const getAllProductsController = async (req, res, next) => {
   try {
     const data = await getAllProductsService();
     res.status(200).json({
       success: true,
-      message: "Data berhasil di load",
+      message: "Fetch products success",
       results: data,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-export const createProductController = async (req, res) => {
+export const createProductController = async (req, res, next) => {
   try {
     const results = await createProductService(req.body);
     return res.status(201).json({
@@ -30,14 +27,11 @@ export const createProductController = async (req, res) => {
       results,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-export const updateProductController = async (req, res) => {
+export const updateProductController = async (req, res, next) => {
   const { id } = req.params;
   try {
     const results = await updateProductService(id, req.body);
@@ -47,13 +41,10 @@ export const updateProductController = async (req, res) => {
       results,
     });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
-export const deleteProductsController = async (req, res) => {
+export const deleteProductsController = async (req, res, next) => {
   const { id } = req.params;
 
   try {
@@ -63,9 +54,6 @@ export const deleteProductsController = async (req, res) => {
       message: "Delete products success",
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
